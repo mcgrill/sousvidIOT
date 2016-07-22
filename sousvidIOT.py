@@ -1,5 +1,8 @@
 # nicholas.h.mcgill@gmail.com
 
+# Run this first to set up the DS18B20
+# sudo modprobe w1-gpio && sudo modprobe w1_therm
+
 # Imports
 import os
 import glob
