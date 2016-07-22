@@ -40,16 +40,19 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
 
         if temp_f <= targetTemp:
-	    GPIO.output(SSR_PIN, 1)
+            GPIO.output(SSR_PIN, 1)
+            heater_on = True
         else:
             GPIO.output(SSR_PIN, 0)
+            heater_on = True
 
-        return temp_c, temp_f
+        return temp_c, temp_f, heater_on
 	
 # Main
 while True:
     try:
         print(read_temp())
+        
         time.sleep(0)
 # Handle Ctrl-C
     except KeyboardInterrupt:
