@@ -1,22 +1,27 @@
+# nicholas.h.mcgill@gmail.com
+
+# Imports
 import os
 import glob
 import time
 import RPi.GPIO as GPIO
 
-SSR_PIN = 12
+# GPIO Setups
+SSR_PIN = 12			# SSR = Solid State Relay
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(SSR_PIN, GPIO.OUT)
 #pin 18, or GPIO12
 
 targetTemp = 80
 
+# Make the DS18B20 work correctly on the pi
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
-
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
 
+# Functions
 def read_temp_raw():
     f = open(device_file, 'r')
     lines = f.readlines()
@@ -41,10 +46,12 @@ def read_temp():
 
         return temp_c, temp_f
 	
+# Main
 while True:
     try:
         print(read_temp())
         time.sleep(0)
+# Handle Ctrl-C
     except KeyboardInterrupt:
         GPIO.cleanup()
 
