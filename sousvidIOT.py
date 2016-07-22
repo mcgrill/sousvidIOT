@@ -50,12 +50,17 @@ def read_temp():
 	
 # Main
 while True:
+
     try:
-        print(read_temp())
-        
-        time.sleep(0)
-# Handle Ctrl-C
-    except KeyboardInterrupt:
-        GPIO.cleanup()
-
-
+        targetTemp=int(raw_input('Enter target temp in F:'))
+        s = 'Setting sights for' + repr(targetTemp) + 'F'
+    except ValueError:
+        print "Not a number"
+    
+    while True:
+        try:
+            print(read_temp())
+            time.sleep(0)
+        # Handle Ctrl-C
+        except KeyboardInterrupt:
+            GPIO.cleanup()
