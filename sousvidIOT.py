@@ -49,7 +49,7 @@ while True:
 
     try:
         targetTemp=int(raw_input('Enter target temp in F:'))
-        s = 'Setting sights for' + repr(targetTemp) + 'F'
+        s = 'Setting sights for ' + repr(targetTemp) + 'F'
         print s
     except ValueError:
         print "Not a number"
@@ -57,19 +57,23 @@ while True:
     while True:
         try:
             try:
-                temp_c,temp_f = read_temp()
+                temp_c, temp_f = read_temp()
             except TypeError:
                 # Handle failures
-            
-            if temp_f <= targetTemp:
+		print 'temp fail'
+            diff = targetTemp - temp_f
+	    s_temp_f = "%.3f" % temp_f
+	    if diff > 0:
                 GPIO.output(SSR_PIN, 1)
                 heater_on = True
-                s = 'cap'n, we are putting on more heat!'
+	        s_diff = "%.3f" % diff
+                s = s_temp_f + ':' + s_diff + ' below target. capn, we are putting on more heat!'
                 print s
             else:
                 GPIO.output(SSR_PIN, 0)
                 heater_on = True
-                s = 'whoa nelly! pump the brakes'
+	        s_diff = "%.3f" % (-1*diff)
+                s = s_temp_f + ':' + s_diff + ' above target. whoa nelly! pump the brakes'
                 print s
             time.sleep(0)
         # Handle Ctrl-C
