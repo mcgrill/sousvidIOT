@@ -42,14 +42,7 @@ def read_temp():
         temp_c = float(temp_string) / 1000.0
         temp_f = temp_c * 9.0 / 5.0 + 32.0
 
-        if temp_f <= targetTemp:
-            GPIO.output(SSR_PIN, 1)
-            heater_on = True
-        else:
-            GPIO.output(SSR_PIN, 0)
-            heater_on = True
-
-        return temp_c, temp_f, heater_on
+        return temp_c, temp_f
 	
 # Main
 while True:
@@ -57,12 +50,27 @@ while True:
     try:
         targetTemp=int(raw_input('Enter target temp in F:'))
         s = 'Setting sights for' + repr(targetTemp) + 'F'
+        print s
     except ValueError:
         print "Not a number"
     
     while True:
         try:
-            print(read_temp())
+            try:
+                temp_c,temp_f = read_temp()
+            except TypeError:
+                # Handle failures
+            
+            if temp_f <= targetTemp:
+                GPIO.output(SSR_PIN, 1)
+                heater_on = True
+                s = 'cap'n, we are putting on more heat!'
+                print s
+            else:
+                GPIO.output(SSR_PIN, 0)
+                heater_on = True
+                s = 'whoa nelly! pump the brakes'
+                print s
             time.sleep(0)
         # Handle Ctrl-C
         except KeyboardInterrupt:
